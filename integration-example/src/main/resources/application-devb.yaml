@@ -1,0 +1,337 @@
+spring:
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
+      enabled: true
+  application:
+    name: java-demo-integration
+  datasource:
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    dynamic:
+      # 是否使用p6spy输出，默认不输出
+      p6spy: false
+      # 设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候会抛出异常,不启动则使用默认数据源.
+      strict: false
+      enabled: true
+      # 是否使用开启seata，默认不开启
+      seata: false
+      # 是否懒加载数据源
+      lazy: false
+      # 是否优雅关闭数据源,等待一段时间后再将数据源销毁
+      graceDestroy: true
+      aop:
+        enabled: true
+      primary: jimu
+      datasource:
+        mysql:
+          #url: jdbc:mysql://localhost:3306/basic?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:p6spy:mysql://192.168.58.110:3306/basic?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: root
+          password: 123456
+        jimu:
+          #url: jdbc:mysql://localhost:3306/jimu?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:p6spy:mysql://192.168.58.110:3306/jimu?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: root
+          password: 123456
+        pgsql:
+          #url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: org.postgresql.Driver
+          url: jdbc:p6spy:postgresql://192.168.58.110:5432/postgres?currentSchema=public&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: postgres
+          password: 123456
+        dmsql:
+          #url: jdbc:dm://192.168.58.110:5236/dm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: dm.jdbc.driver.DmDriver
+          url: jdbc:p6spy:dm://192.168.58.110:5236/dm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: SYSDBA
+          password: SYSDBA001
+      druid:
+        # 配置初始化线程数
+        initialSize: 5
+        # 最小线程数
+        minIdle: 5
+        # CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+        maxActive: 11
+        # 最大等待时间，内网：800，外网：1200（三次握手1s）
+        maxWait: 60000
+        # 连接可空闲存活时间（ms）
+        # 连接回收器运行的时间间隔，单位为毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 连接保持空闲而不被驱逐的最长存活时间（ms）
+        # 连接在池中最小空闲的时间，达到此值后将被移除，单位为毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 用来检测连接是否有效的sql，如果validationQuery为空，那么testOnBorrow、testOnReturn、testWhileIdle这三个参数都不会起作用
+        # 验证连接的SQL语句
+        validationQuery: SELECT 1
+        # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效；
+        testWhileIdle: true
+        # 建议配置为false，申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnBorrow: false
+        # 建议配置为false，归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能；
+        testOnReturn: false
+        # 每个连接缓存Statement的最大数目
+        # PSCache对支持游标的数据库性能提升巨大
+        # oracle设为true，mysql设为false。分库分表较多推荐设置为false
+        poolPreparedStatements: true
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        # 连接过滤器，用于统计和防火墙功能 stat,wall
+        filters: stat
+        stat:
+          # 是否打印慢SQL日志
+          log-slow-sql: true
+          # 慢SQL的阈值时间，单位为毫秒
+          slow-sql-millis: 1000
+          # 是否合并SQL，默认为false
+          merge-sql: true
+        wall:
+          # 是否允许一次执行多条语句，默认为true
+          multi-statement-allow: true
+          #enabled: true
+          # 设置白名单，不填则允许所有访问
+          #allow:
+          #url-pattern: /druid/*
+          # 控制台管理用户名和密码
+          #login-username: helloworld
+          #login-password: 123456
+        # 保持minIdle数量的长连接
+        keepAlive: true
+        # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+        # 在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100。缺省值为-1
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 是否合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        #connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    type: com.alibaba.druid.pool.DruidDataSource
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  banner:
+    location: classpath:banner/banner-spring.txt
+    charset: UTF-8
+    image:
+      location: classpath:banner.gif
+  redis:
+    port: 6379
+    host: 192.168.58.110
+    password: 123456
+    #username:
+    database: 0
+    connect-timeout: 5s
+    timeout: 5s
+    # Lettuce 客户端的配置
+    lettuce:
+      pool:
+        enabled: true
+        # 最小空闲连接
+        min-idle: 0
+        # 最大空闲连接
+        max-idle: 8
+        # 最大活跃连接
+        max-active: 8
+        # 从连接池获取连接 最大超时时间，小于等于0则表示不会超时
+        max-wait: -1ms
+    # jedis 配置
+    jedis:
+      pool:
+        enabled: true
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+  data:
+    mongodb:
+      username: root
+      password: 123456
+      host: 192.168.58.110
+      database: basic
+  devtools:
+    restart:
+      enabled: false
+  web:
+    resources:
+      static-locations: classpath:/static/
+      #不要为工程中的资源文件建立映射,禁止静态资源的访问
+      add-mappings: false
+  mvc:
+    # 出现错误时, 直接抛出异常
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /**
+  #resources:
+    #static-locations: classpath:/static/
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+    fail-on-unknown-properties: false
+  aop:
+    auto: true
+    proxy-target-class: true
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: console
+    allow-circular-references: false
+    log-startup-info: true
+  elasticsearch:
+    uris: http://192.168.58.110:9200
+    connection-timeout: 1s
+    username: "elastic"
+    password: "elasticpw"
+
+logging:
+  file:
+    path: ./logs
+  config: classpath:logback-dev.xml
+  level:
+    com.github.jianlu8023.example: debug
+    com.github.jianlu8023.example.integration.web.database: info
+    com.alibaba.druid: debug
+    com.baomidou: debug
+    com.github.jianlu8023.utils: debug
+    org.apache.ibatis.logging: debug
+    org.springframework.data.elasticsearch: debug
+    org.springframework.data.repository: debug
+    org.jeecg.modules.jmreport : debug
+    #org.jeecgframework.minidao.auto: debug
+    com.baomidou.dynamic.datasource.aop: debug
+
+server:
+  servlet:
+    context-path: /integration
+    session:
+      timeout: 3000s
+  port: 8090
+  ssl:
+    # keytool -genkey -alias demo -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore demo-keystore.p12 -validity 3650
+    # 程序使用ec算法的证书 下方命令
+    # keytool -genkey -alias integration -storetype PKCS12 -keyalg EC -keysize 256 -keystore integration-keystore.p12 -validity 3650 -sigalg SHA256withECDSA
+    enabled: true
+    key-store: classpath:integration-keystore.p12
+    key-store-type: PKCS12
+    key-alias: integration
+    key-store-password: integration
+  http2:
+    enabled: true
+  max-http-header-size: 1MB
+
+mybatis-plus:
+  configuration:
+    cache-enabled: true # 使全局的映射器启用或禁用缓存
+    use-generated-keys: true # 允许JDBC 支持自动生成主键
+    default-executor-type: simple # 配置默认的执行器.SIMPLE就是普通执行器;REUSE执行器会重用预处理语句(prepared statements);BATCH执行器将重用语句并执行批量更新
+    map-underscore-to-camel-case: true # 使用驼峰命名法转换字段
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+  mapper-locations: classpath*:/mapper/*.xml
+
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  auto-dialect: true
+  auto-runtime-dialect: true
+
+#JimuReport[minidao配置]
+minidao:
+  #base-package: org.jeecg.modules.jmreport.desreport.dao*
+  base-package: org.jeecg.modules.jmreport.*,org.jeecg.modules.drag.*
+  db-type: mysql
+  show-sql: true
+#JimuReport[上传配置]
+jeecg:
+  #minidao-datasource:
+    #url: jdbc:mysql://localhost:3306/jimu?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    ##url: jdbc:p6spy:mysql://192.168.58.110:3306/jimu?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+    ##driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    #username: root
+    #password: 123456
+  jmreport:
+    #多租户模式，默认值为空(created:按照创建人隔离、tenant:按照租户隔离) (v1.6.2+ 新增)
+    saasMode: created
+    # 平台上线安全配置(v1.6.2+ 新增)
+    firewall:
+      # 数据源安全 (开启后，不允许使用平台数据源、SQL解析加签并且不允许查询数据库)
+      dataSourceSafe: true
+      # 低代码开发模式（dev:开发模式, prod:发布模式关闭报表设计,admin或预留角色可设计, prodsf:发布安全模式 彻底关闭报表设计）
+      lowCodeMode: dev
+    #是否 禁用导出PDF和图片的按钮 默认为false
+    exportDisabled: false
+    # 导出是否开启另存为弹窗 默认为false (v1.7.4+)
+    enableSaveAsOpen: false
+    #是否自动保存
+    autoSave: true
+    #自动保存间隔时间毫秒
+    # 单位毫秒 默认5*60*1000
+    interval: 20000
+    # 行数(设计页面展示多少行)
+    row: 100
+    # 列数(设计页面展示多少列)
+    col: 100
+    #自定义项目前缀
+    customPrePath:
+    # 自定义API接口的前缀 #{api_base_path}和#{domainURL}的值
+    apiBasePath: http://localhost:8080/jeecg-boot
+    #数据源标识(作废参数)
+    datasource: minidao
+    #预览分页自定义
+    pageSize:
+      - 10
+      - 20
+      - 30
+      - 40
+    #打印纸张自定义
+    printPaper:
+      - title: A5纸
+        size:
+          - 148
+          - 210
+      - title: B4纸
+        size:
+          - 250
+          - 353
+    #接口超时设置（毫秒）
+    connect-timeout: 300000
+    #导出超时时间（毫秒，默认600000）
+    export-timeout: 600000
+    #Excel导出模式(fast/快、primary/精致模式，默认fast)
+    export-excel-pattern: fast
+    #Excel导出数据每个sheet的行数,每个sheet最大1048576行
+    page-size-number: 10000
+    #设计页面表格的线是否显示 默认true
+    line: true
+    #只看自己创建数据 (v1.6.2+删除)
+    saas: false
+    #是否开启租户模式 (v1.6.2+删除)
+    openTenant: false
+    #sql数据源不写字典下拉框显示条数 (v1.4.2+删除)
+    select-show-total: 10
+    #是否启用签名校验,默认不开启，对执行sql的接口参数校验(v1.6.2+删除)
+    safeMode: true
+  # local|minio|alioss
+  uploadType: local
+  # local
+  path:
+    #文件路径
+    upload: /home/user/images
+    # alioss
+    #oss:
+    #endpoint: oss-cn-beijing.aliyuncs.com
+    #accessKey: ??
+    #secretKey: ??
+    #staticDomain: ??
+    #bucketName: ??
+    # minio
+    #minio:
+    #minio_url: http://minio.jeecg.com
+    #minio_name: ??
+    #minio_pass: ??
+    #bucketName: ??

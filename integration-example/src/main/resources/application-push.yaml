@@ -1,0 +1,4 @@
+push:
+  status:
+    enabled: true
+    url: "https://localhost:8090/integration/status/ping"

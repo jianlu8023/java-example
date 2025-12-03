@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jianlu8023.example.integration.web.database.mysql.mapper.TbUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.github.jianlu8023.example.integration.web.database.mysql.entity.TbUser">
+        <id property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="full_name" column="full_name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone_number" column="phone_number" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="VARCHAR"/>
+        <result property="birth_date" column="birth_date" jdbcType="DATE"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,username,password,
+        full_name,email,phone_number,
+        gender,birth_date,address
+    </sql>
+
+    <select id="selectTbUserList">
+        ${sql}
+    </select>
+
+    <insert id="insertBatches">
+        INSERT INTO ${tableName} (${Base_Column_List})
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+             #{item.uid},
+             #{item.username},
+             #{item.password},
+             #{item.full_name},
+             #{item.email},
+             #{item.phone_number},
+             #{item.gender},
+             #{item.birth_date},
+             #{item.address}
+             )
+        </foreach>
+    </insert>
+</mapper>

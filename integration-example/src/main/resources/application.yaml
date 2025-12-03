@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: java-demo-integration
+  profiles:
+    active: push,devb
+

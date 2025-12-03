@@ -1,0 +1,16 @@
+networks:
+  app:
+    name: "app_net"
+
+services:
+  integration:
+    image: java-demo/alpine/integration:v202411111757
+    restart: on-failure:3
+    container_name: integration
+    networks:
+      - app
+    ports:
+      - "8080:8090"
+    volumes:
+      - ./logs:/usr/share/app/logs
+      - ./src/main/resources:/usr/share/app/config

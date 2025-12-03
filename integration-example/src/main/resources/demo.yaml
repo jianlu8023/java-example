@@ -1,0 +1,4 @@
+demo:
+  name: yaml
+  age: 18
+  gender: male

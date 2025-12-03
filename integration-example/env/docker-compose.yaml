@@ -1,0 +1,85 @@
+networks:
+  app:
+    name: "network_app"
+
+services:
+  mysql:
+    restart: always
+    image: mysql:8.4.2
+    container_name: mysql
+    networks:
+      - app
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+#      - ./mysql/mydir:/mydir
+      - ./mysql/datadir:/var/lib/mysql
+#      - ./mysql/conf/my.cnf:/etc/my.cnf
+#      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+#      - ./mysql/source:/docker-entrypoint-initdb.d
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "MYSQL_DATABASE=basic"
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 3306:3306
+    #command: ["--lower_case_table_names=1"]
+
+  redis:
+    restart: always
+    networks:
+      - app
+    image: redis:7.2.0-alpine3.18
+    container_name: redis
+    volumes:
+      - ./redis/datadir:/data
+#      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/logs:/logs
+#      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    command: redis-server --requirepass 123456
+    ports:
+      - '6379:6379'
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    restart: always
+    command: mongod
+    networks:
+      - app
+    environment:
+      TZ: Asia/Shanghai
+      MONGO_INITDB_DATABASE: basic
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: "123456"
+      wiredTigerCacheSizeGB: 2
+    volumes:
+      - ./mongo/data:/data/db
+      - ./mongo/logs:/var/log/mongodb
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./mongo/init.d:/docker-entrypoint-initdb.d
+      - /etc/timezone:/etc/timezone:ro
+
+  pgsql:
+    image: postgres:16.3-alpine3.20
+    container_name: postgresql
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - LANG=zh_CN.UTF-8
+      - TZ=Asia/Shanghai
+      - POSTGRES_INITDB_ARGS="--locale=zh-CN"
+    networks:
+      - app
+
+

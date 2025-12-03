@@ -1,0 +1,251 @@
+spring:
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
+      enabled: true
+  application:
+    name: java-demo-integration
+  datasource:
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    dynamic:
+      aop:
+        enabled: true
+      primary: mysql
+      datasource:
+        mysql:
+          #url: jdbc:mysql://localhost:3306/basic?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:p6spy:mysql://192.168.58.130:3306/basic?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: root
+          password: 123456
+        pgsql:
+          #url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: org.postgresql.Driver
+          url: jdbc:p6spy:postgresql://192.168.58.130:5432/postgres?currentSchema=public&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: postgres
+          password: 123456
+        dmsql:
+          #url: jdbc:dm://192.168.58.130:5236/dm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          #driver-class-name: dm.jdbc.driver.DmDriver
+          url: jdbc:p6spy:dm://192.168.58.130:5236/dm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: SYSDBA
+          password: SYSDBA001
+      druid:
+        # 配置初始化线程数
+        initialSize: 5
+        # 最小线程数
+        minIdle: 5
+        # CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+        maxActive: 11
+        # 最大等待时间，内网：800，外网：1200（三次握手1s）
+        maxWait: 60000
+        # 连接可空闲存活时间（ms）
+        # 连接回收器运行的时间间隔，单位为毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 连接保持空闲而不被驱逐的最长存活时间（ms）
+        # 连接在池中最小空闲的时间，达到此值后将被移除，单位为毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 用来检测连接是否有效的sql，如果validationQuery为空，那么testOnBorrow、testOnReturn、testWhileIdle这三个参数都不会起作用
+        # 验证连接的SQL语句
+        validationQuery: SELECT 1
+        # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效；
+        testWhileIdle: true
+        # 建议配置为false，申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnBorrow: false
+        # 建议配置为false，归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能；
+        testOnReturn: false
+        # 每个连接缓存Statement的最大数目
+        # PSCache对支持游标的数据库性能提升巨大
+        # oracle设为true，mysql设为false。分库分表较多推荐设置为false
+        poolPreparedStatements: true
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        # 连接过滤器，用于统计和防火墙功能 stat,wall
+        filters: stat
+        stat:
+          # 是否打印慢SQL日志
+          log-slow-sql: true
+          # 慢SQL的阈值时间，单位为毫秒
+          slow-sql-millis: 1000
+          # 是否合并SQL，默认为false
+          merge-sql: true
+        wall:
+          # 是否允许一次执行多条语句，默认为true
+          multi-statement-allow: true
+
+        #      enabled: true
+        #      # 设置白名单，不填则允许所有访问
+        #      allow:
+        #      url-pattern: /druid/*
+        #      # 控制台管理用户名和密码
+        #      login-username: helloworld
+        #      login-password: 123456
+
+        # 保持minIdle数量的长连接
+        keepAlive: true
+        # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+        # 在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100。缺省值为-1
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 是否合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      # 设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候会抛出异常,不启动则使用默认数据源.
+      strict: false
+    type: com.alibaba.druid.pool.DruidDataSource
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  banner:
+    location: classpath:banner/banner-spring.txt
+    charset: UTF-8
+    image:
+      location: classpath:banner.gif
+  redis:
+    port: 6379
+    host: 192.168.58.130
+    password: 123456
+    #username:
+    database: 0
+    connect-timeout: 5s
+    timeout: 5s
+    # Lettuce 客户端的配置
+    lettuce:
+      pool:
+        enabled: true
+        # 最小空闲连接
+        min-idle: 0
+        # 最大空闲连接
+        max-idle: 8
+        # 最大活跃连接
+        max-active: 8
+        # 从连接池获取连接 最大超时时间，小于等于0则表示不会超时
+        max-wait: -1ms
+    # jedis 配置
+    jedis:
+      pool:
+        enabled: true
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+  data:
+    mongodb:
+      username: root
+      password: 123456
+      host: 192.168.58.130
+      database: basic
+  devtools:
+    restart:
+      enabled: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+      #不要为工程中的资源文件建立映射,禁止静态资源的访问
+      add-mappings: false
+  mvc:
+    # 出现错误时, 直接抛出异常
+    throw-exception-if-no-handler-found: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  aop:
+    auto: true
+    proxy-target-class: true
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: console
+    allow-circular-references: false
+    log-startup-info: true
+  # elasticsearch 在springboot 2.7.18版本中能用的最高版本是7.17.15版本
+  elasticsearch:
+    uris: http://192.168.58.130:9200
+    connection-timeout: 1s
+    username: "elastic"
+    password: "elasticpw"
+
+logging:
+  file:
+    path: ./logs
+  config: classpath:logback-dev.xml
+  level:
+    com.github.jianlu8023.example: debug
+    com.github.jianlu8023.example.integration.web.database: info
+    com.alibaba.druid: debug
+    com.baomidou: debug
+    com.github.jianlu8023.utils: debug
+    org.apache.ibatis.logging: debug
+server:
+  servlet:
+    context-path: /integration
+    session:
+      timeout: 3000s
+  port: 8090
+  ssl:
+    # keytool -genkey -alias demo -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore demo-keystore.p12 -validity 3650
+    # 程序使用ec算法的证书 下方命令
+    # keytool -genkey -alias integration -storetype PKCS12 -keyalg EC -keysize 256 -keystore integration-keystore.p12 -validity 3650 -sigalg SHA256withECDSA
+    enabled: true
+    key-store: classpath:integration-keystore.p12
+    key-store-type: PKCS12
+    key-alias: integration
+    key-store-password: integration
+  http2:
+    enabled: true
+  max-http-header-size: 1MB
+  tomcat:
+    max-connections: 8192
+    accept-count: 100
+    accesslog:
+      buffered: true
+      enabled: false
+      encoding: UTF-8
+      suffix: .log
+      max-days: -1
+      check-exists: false
+      ipv6-canonical: false
+      directory: logs
+      pattern: common
+      rename-on-rotate: false
+      rotate: true
+      request-attributes-enabled: false
+    connection-timeout: 60
+    uri-encoding: UTF-8
+    remoteip:
+      host-header: "X-Forwarded-Host"
+      port-header: "X-Forwarded-Port"
+      protocol-header-https-value: https
+    resource:
+      allow-caching: true
+    threads:
+      max: 200
+      min-spare: 10
+    use-relative-redirects: false
+    max-http-form-post-size: 2MB
+    background-processor-delay: 10s
+    max-keep-alive-requests: 100
+    max-swallow-size: 2MB
+    mbeanregistry:
+      enabled: false
+    processor-cache: 200
+    redirect-context-root: true
+
+mybatis-plus:
+  configuration:
+    cache-enabled: true # 使全局的映射器启用或禁用缓存
+    use-generated-keys: true # 允许JDBC 支持自动生成主键
+    default-executor-type: simple # 配置默认的执行器.SIMPLE就是普通执行器;REUSE执行器会重用预处理语句(prepared statements);BATCH执行器将重用语句并执行批量更新
+    map-underscore-to-camel-case: true # 使用驼峰命名法转换字段
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+  mapper-locations: classpath*:/mapper/*.xml
+
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  auto-dialect: true
+  auto-runtime-dialect: true
