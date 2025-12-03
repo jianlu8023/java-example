@@ -17,6 +17,7 @@
     <modules>
         <module>docker-deploy-example</module>
         <module>grpc-example</module>
+        <module>call-https-example</module>
     </modules>
 
     <properties>

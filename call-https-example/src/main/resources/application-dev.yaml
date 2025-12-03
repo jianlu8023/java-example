@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: https
+logging:
+  file:
+    path: ./logs
+  config: classpath:logback-dev.xml
+  level:
+    com.github.jianlu8023.example: debug
+
+server:
+  servlet:
+    context-path: /https
+  port: 8090
+  ssl:
+    #keytool -genkey -alias demo -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore demo-keystore.p12 -validity 3650
+    enabled: true
+    key-store: classpath:demo-keystore.p12
+    key-store-type: PKCS12
+    key-alias: demo
+    key-store-password: 123456
