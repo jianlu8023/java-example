@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: utils
+logging:
+  level:
+    com.github.jianlu8023.utils: debug
+  config: classpath:logback-dev.xml
+  file:
+    path: ./logs

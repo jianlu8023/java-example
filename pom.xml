@@ -28,6 +28,7 @@
         <module>propertiesload-example</module>
         <module>redis-example</module>
         <module>thymeleaf-example</module>
+        <module>utils-example</module>
     </modules>
 
     <properties>
