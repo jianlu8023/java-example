@@ -25,6 +25,7 @@
         <module>archetype-example</module>
         <module>mpbatchinsert-example</module>
         <module>multidb-example</module>
+        <module>propertiesload-example</module>
     </modules>
 
     <properties>
