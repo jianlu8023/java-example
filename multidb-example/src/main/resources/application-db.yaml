@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    dynamic:
+      aop:
+        enabled: true
+      primary: master
+      datasource:
+        master:
+#          url: jdbc:mysql://127.0.0.1:3306/basic
+          url: jdbc:p6spy:mysql://192.168.58.130:3306/basic
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: root
+          password: 123456
+        slave:
+#          url: jdbc:mysql://127.0.0.1:3306/basic
+          url: jdbc:p6spy:mysql://192.168.58.130:3306/basic
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: root
+          password: 123456
+
+mybatis-plus:
+  global-config:
+    banner: false
+  mapper-locations: classpath*:/mapper/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

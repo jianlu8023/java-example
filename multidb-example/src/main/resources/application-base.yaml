@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /multiDataSource
+logging:
+  level:
+    com.baomidou: debug
+    com.github.jianlu8023.example: debug
+  config: classpath:logback-dev.xml
+  file:
+    path: ./logs
+
+spring:
+  banner:
+    charset: UTF-8
+  main:
+    banner-mode: console
+  application:
+    name: multi-datasource

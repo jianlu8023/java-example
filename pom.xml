@@ -24,6 +24,7 @@
         <module>logging-example</module>
         <module>archetype-example</module>
         <module>mpbatchinsert-example</module>
+        <module>multidb-example</module>
     </modules>
 
     <properties>

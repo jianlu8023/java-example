@@ -1,0 +1,6 @@
+# https://www.kancloud.cn/tracy5546/dynamic-datasource/2264611
+# https://baomidou.com/
+
+spring:
+  profiles:
+    active: db,base
