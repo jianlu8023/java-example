@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: logging
+  servlet:
+    multipart:
+      max-request-size: 1024MB
+      max-file-size: 1024MB
+      enabled: true
+  aop:
+    auto: true
+    proxy-target-class: true
+  banner:
+    charset: UTF-8
+    image:
+      pixelmode: text
+    location: classpath*:banner.txt
+  main:
+    banner-mode: console
+    allow-bean-definition-overriding: true
+server:
+  port: 8089
+  servlet:
+    context-path: /logging

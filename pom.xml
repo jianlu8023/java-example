@@ -21,6 +21,7 @@
         <module>integration-example</module>
         <module>basemaven-example</module>
         <module>ipfs-example</module>
+        <module>logging-example</module>
     </modules>
 
     <properties>
