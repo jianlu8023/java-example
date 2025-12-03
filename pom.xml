@@ -20,6 +20,7 @@
         <module>call-https-example</module>
         <module>integration-example</module>
         <module>basemaven-example</module>
+        <module>ipfs-example</module>
     </modules>
 
     <properties>
