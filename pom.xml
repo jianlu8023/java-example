@@ -22,6 +22,7 @@
         <module>basemaven-example</module>
         <module>ipfs-example</module>
         <module>logging-example</module>
+        <module>archetype-example</module>
     </modules>
 
     <properties>

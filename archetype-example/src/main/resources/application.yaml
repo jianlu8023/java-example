@@ -1,0 +1,8 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /spring-boot-template-archetype
+
+spring:
+  application:
+    name: spring-boot-template-archetype
