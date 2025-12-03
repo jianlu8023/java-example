@@ -1,0 +1,18 @@
+version: "3.9"
+
+networks:
+  basic:
+    name: "basic"
+
+services:
+  deployment:
+    image: java-demo-docker-deployment:1.0.0
+    ports:
+      - "8080:8080"
+    networks:
+      - basic
+    restart: always
+    volumes:
+      - ./src/main/resources:/usr/share/docker-deployment/config
+      - ./logs:/usr/share/docker-deployment/logs
+      - ./target/lib:/usr/share/docker-deployment/lib

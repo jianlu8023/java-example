@@ -1,0 +1,23 @@
+syntax = 'proto3';
+
+option java_multiple_files = true;
+option java_package = "com.github.jianlu8023.grpcexample.proto.message";
+option java_outer_classname = "BaseMessage";
+
+service MessageService {
+  rpc message(MessageRequest) returns(MessageResponse) {};
+}
+
+message MessageRequest {
+  string type = 1;
+  string msg = 2;
+  string from = 3;
+  string to = 4;
+}
+
+message MessageResponse {
+  string type = 1;
+  string msg = 2;
+  string from = 3;
+  string to = 4;
+}

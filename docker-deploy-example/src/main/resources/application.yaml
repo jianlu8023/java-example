@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: docker-deploy
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ./logs
+  level:
+    com.github.jianlu8023: debug

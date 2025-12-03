@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package model;
+
+option java_package = "com.github.jianlu8023.grpcexample.proto.ping";
+option java_outer_classname = "PingProto";
+option java_multiple_files = true;
+
+message Ping{
+  int64  id = 1;
+  string message = 2;
+  string ipaddr = 3;
+}
+
+message Pong{
+  int64 id = 1;
+  string message = 2;
+  string ipaddr = 3;
+}
+
+service PingService{
+  rpc ping(Ping) returns (Pong){}
+}
+
