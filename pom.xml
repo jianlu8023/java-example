@@ -27,6 +27,7 @@
         <module>multidb-example</module>
         <module>propertiesload-example</module>
         <module>redis-example</module>
+        <module>thymeleaf-example</module>
     </modules>
 
     <properties>

@@ -1,0 +1,11 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /thymeleaf
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1024MB
+      max-request-size: 1024MB
