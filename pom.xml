@@ -23,6 +23,7 @@
         <module>ipfs-example</module>
         <module>logging-example</module>
         <module>archetype-example</module>
+        <module>mpbatchinsert-example</module>
     </modules>
 
     <properties>

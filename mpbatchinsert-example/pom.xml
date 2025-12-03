@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.github.jianlu8023.example</groupId>
+    <artifactId>mpbatchinsert-example</artifactId>
+    <version>1.0.0-ALPHA</version>
+
+    <name>mpbatchinsert-example</name>
+
+    <properties>
+        <mybatis-plus-boot-starter.version>3.5.3.2</mybatis-plus-boot-starter.version>
+        <datafaker.version>1.4.0</datafaker.version>
+        <hutool-all.version>5.8.25</hutool-all.version>
+        <p6spy.version>3.9.1</p6spy.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>${p6spy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${datafaker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.github.jianlu8023.mpbatchinsertexample.BatchInsertApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

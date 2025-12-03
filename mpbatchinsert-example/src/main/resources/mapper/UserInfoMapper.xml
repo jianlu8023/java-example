@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.jianlu8023.mpbatchinsertexample.web.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.github.jianlu8023.mpbatchinsertexample.web.entity.UserInfo">
+            <id property="uid" column="uid" jdbcType="INTEGER"/>
+            <result property="user_name" column="user_name" jdbcType="VARCHAR"/>
+            <result property="user_age" column="user_age" jdbcType="INTEGER"/>
+            <result property="user_sfz" column="user_sfz" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,user_name,user_age,
+        user_sfz
+    </sql>
+</mapper>
