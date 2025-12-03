@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!--    指定连接数据库jdbc驱动包所在位置，指定本机完整路径-->
+    <classPathEntry
+            location="D:\Program Files\JAVA\.m2\repository\mysql\mysql-connector-java\5.1.9\mysql-connector-java-5.1.9.jar"/>
+
+    <!--    配置table表信息内容体，targetRuntime 指定mybatis3版本-->
+    <context id="tables" targetRuntime="MyBatis3">
+        <!--        抑制生成注释，由于生成的注释都是英文，可以不让它生成-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--        配置数据库连接信息-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/study"
+                        userId="root"
+                        password="123456">
+
+        </jdbcConnection>
+
+
+        <!--        生成entity类，targetPackage指定类全名
+        targetProject 指定生成的放在哪个工程下-->
+        <javaModelGenerator targetPackage="cn.edu.shzu.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+
+        <!--        生成mybatis的mapper.xml文件，targetPackage指定mapper文件的包名
+        targetProject指定生成的mapper文件放在哪个工程下面-->
+        <sqlMapGenerator targetPackage="cn.edu.shzu.dao"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+
+        <!--        生成mybatis的mapper接口文件，targetPackage指定mapper接口文件包名
+        targetProject指定生成mapper接口存放在哪个工程下面-->
+        <javaClientGenerator
+                type="XMLMAPPER"
+                targetPackage="cn.edu.shzu.dao"
+                targetProject="src/main/java">
+
+        </javaClientGenerator>
+
+
+        <!--    数据库表名以及对象java模型类名-->
+        <table tableName="student" domainObjectName="Student"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+
+
+<!--        <table tableName="stu" domainObjectName="Stu"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"/>-->
+
+<!--        <table tableName="goods" domainObjectName="Goods"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"/>-->
+
+<!--        <table tableName="log" domainObjectName="Log"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"/>-->
+
+<!--        <table tableName="sale" domainObjectName="Sale"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"/>-->
+
+    </context>
+</generatorConfiguration>

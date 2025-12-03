@@ -1,0 +1,6 @@
+/*
+ * Copyright 2023 Your Company
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// https://github.com/mycila/license-maven-plugin/tree/master/license-maven-plugin/src/main/resources/com/mycila/maven/plugin/license/templates
