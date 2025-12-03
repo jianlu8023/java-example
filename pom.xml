@@ -26,6 +26,7 @@
         <module>mpbatchinsert-example</module>
         <module>multidb-example</module>
         <module>propertiesload-example</module>
+        <module>redis-example</module>
     </modules>
 
     <properties>

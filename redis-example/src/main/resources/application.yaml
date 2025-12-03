@@ -1,0 +1,41 @@
+spring:
+  # servlet
+  servlet:
+    multipart:
+      max-request-size: 1024MB
+      max-file-size: 1024MB
+  # redis
+  redis:
+    password: 123456
+    database: 0
+    host: 192.168.58.130
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+    #    jedis:
+    #      pool:
+    #        max-active: 8
+    #        max-wait: -1ms
+    #        max-idle: 8
+    #        min-idle: 0
+    connect-timeout: 5s
+    timeout: 5s
+  application:
+    name: redis
+
+
+server:
+  port: 9000
+  servlet:
+    context-path: /redis
+
+logging:
+  file:
+    path: ./logs
+  config: classpath:logback-dev.xml
+  level:
+    com.github.jianlu8023.example: debug
