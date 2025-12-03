@@ -19,6 +19,7 @@
         <module>grpc-example</module>
         <module>call-https-example</module>
         <module>integration-example</module>
+        <module>basemaven-example</module>
     </modules>
 
     <properties>
