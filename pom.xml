@@ -29,6 +29,7 @@
         <module>redis-example</module>
         <module>thymeleaf-example</module>
         <module>utils-example</module>
+        <module>jsp-example</module>
     </modules>
 
     <properties>
