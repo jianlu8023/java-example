@@ -1,5 +1,6 @@
 package com.github.jianlu8023.format.advice.response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.github.jianlu8023.format.annotation.*;
 import com.github.jianlu8023.format.response.*;
