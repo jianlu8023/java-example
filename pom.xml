@@ -8,11 +8,11 @@
 
     <groupId>com.github.jianlu8023</groupId>
     <artifactId>java-example</artifactId>
-    <version>1.0.0-alpha</version>
+    <version>1.0.0</version>
 
     <packaging>pom</packaging>
     <name>java-example</name>
-    <description>jianlu's java examples</description>
+    <description>multi spring boot starter</description>
 
     <modules>
         <module>format-spring-boot-starter</module>
@@ -388,6 +388,44 @@
         <pluginManagement>
 
             <plugins>
+                <!-- JitPack requires source and javadoc jars -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doclint>none</doclint>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.mybatis.generator</groupId>
                     <artifactId>mybatis-generator-maven-plugin</artifactId>

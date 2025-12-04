@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- <parent> -->
+    <!--     <artifactId>spring-boot-starter-parent</artifactId> -->
+    <!--     <groupId>org.springframework.boot</groupId> -->
+    <!--     <version>2.7.18</version> -->
+    <!--     <relativePath/> -->
+    <!-- </parent> -->
     <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <groupId>org.springframework.boot</groupId>
-        <version>2.7.18</version>
-        <relativePath/>
+        <artifactId>java-example</artifactId>
+        <groupId>com.github.jianlu8023</groupId>
+        <version>1.0.0.RELEASE</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.github.jianlu8023</groupId>
     <artifactId>format-spring-boot-starter</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.0</version>
 
     <name>format-spring-boot-starter</name>
+    <description>myself format http response spring boot starter</description>
 
     <dependencies>
         <dependency>
@@ -60,68 +65,96 @@
         <!--</resources>-->
 
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!-- 如果没有该项配置devtools不会起作用，即应用不会restart -->
-                    <!--<fork>true</fork>-->
-                    <!--支持静态文件热部署-->
-                    <addResources>true</addResources>
-                    <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>com.github.jianlu8023.format.FormatApplication</mainClass>
+            <!-- <plugin> -->
+            <!--     <groupId>org.springframework.boot</groupId> -->
+            <!--     <artifactId>spring-boot-maven-plugin</artifactId> -->
+            <!--     <configuration> -->
+            <!--         &lt;!&ndash; 如果没有该项配置devtools不会起作用，即应用不会restart &ndash;&gt; -->
+            <!--         &lt;!&ndash;<fork>true</fork>&ndash;&gt; -->
+            <!--         &lt;!&ndash;支持静态文件热部署&ndash;&gt; -->
+            <!--         <addResources>true</addResources> -->
+            <!--         &lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt; -->
+            <!--         <mainClass>com.github.jianlu8023.format.FormatApplication</mainClass> -->
 
-                    <!-- spring-boot-maven-plugin这个插件打包的Jar包可以直接运行，但是不可依赖, 添加如下配置使其可被依赖 -->
-                    <classifier>exec</classifier>
+            <!--         &lt;!&ndash; spring-boot-maven-plugin这个插件打包的Jar包可以直接运行，但是不可依赖, 添加如下配置使其可被依赖 &ndash;&gt; -->
+            <!--         <classifier>exec</classifier> -->
 
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <goals>
-                            <!--可以把依赖的包都打包到生成的Jar包中-->
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--     </configuration> -->
+            <!--     <executions> -->
+            <!--         <execution> -->
+            <!--             <id>repackage</id> -->
+            <!--             <goals> -->
+            <!--                 &lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt; -->
+            <!--                 <goal>repackage</goal> -->
+            <!--             </goals> -->
+            <!--         </execution> -->
+            <!--     </executions> -->
+            <!-- </plugin> -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
+            <!-- <plugin> -->
+            <!--     <groupId>org.apache.maven.plugins</groupId> -->
+            <!--     <artifactId>maven-resources-plugin</artifactId> -->
+            <!--     <configuration> -->
+            <!--         &lt;!&ndash;将不需要转码的文件扩展名填入nonFilteredFileExtensions&ndash;&gt; -->
+            <!--         <nonFilteredFileExtensions> -->
+            <!--             &lt;!&ndash;<nonFilteredFileExtension>p12</nonFilteredFileExtension>&ndash;&gt; -->
+            <!--             <nonFilteredFileExtension>jks</nonFilteredFileExtension> -->
+            <!--             <nonFilteredFileExtension>xls</nonFilteredFileExtension> -->
+            <!--             <nonFilteredFileExtension>xlsx</nonFilteredFileExtension> -->
+            <!--         </nonFilteredFileExtensions> -->
+            <!--     </configuration> -->
+            <!--     <executions> -->
+            <!--         <execution> -->
+            <!--             <id>copy-static-files</id> -->
+            <!--             <phase>generate-resources</phase> -->
+            <!--             <goals> -->
+            <!--                 <goal>copy-resources</goal> -->
+            <!--             </goals> -->
+            <!--             <configuration> -->
+            <!--                 <outputDirectory>${project.build.outputDirectory}/static</outputDirectory> -->
+            <!--                 <resources> -->
+            <!--                     <resource> -->
+            <!--                         <directory>src/main/resources/static</directory> -->
+            <!--                         <includes> -->
+            <!--                             <include>**/*</include> -->
+            <!--                         </includes> -->
+            <!--                     </resource> -->
+            <!--                 </resources> -->
+            <!--             </configuration> -->
+            <!--         </execution> -->
+            <!--     </executions> -->
+            <!-- </plugin> -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <!--将不需要转码的文件扩展名填入nonFilteredFileExtensions-->
-                    <nonFilteredFileExtensions>
-                        <!--<nonFilteredFileExtension>p12</nonFilteredFileExtension>-->
-                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-static-files</id>
-                        <phase>generate-resources</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources/static</directory>
-                                    <includes>
-                                        <include>**/*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
             </plugin>
         </plugins>
     </build>
