@@ -1,9 +1,13 @@
 package com.github.jianlu8023.format.response;
 
+import lombok.*;
+
 import java.io.*;
 import java.util.*;
 
 
+@Getter
+@Setter
 public class ApiResponse<T> implements Serializable {
 
     private static final long serialVersionUID = -1L;
@@ -14,98 +18,77 @@ public class ApiResponse<T> implements Serializable {
 
     private T data;
 
-    public ApiResponse() {
+    private Boolean success;
+
+    private ApiResponse() {
     }
 
-    public ApiResponse(ResponseStatus responseStatus) {
-        this.code = responseStatus.getCode();
-        this.message = responseStatus.getMessage();
+    private ApiResponse(ResponseStatus status, T data, Boolean success) {
+        this.code = status.getCode();
+        this.message = status.getMessage();
+        this.data = data;
+        this.success = success;
     }
 
-    public ApiResponse(Integer code, String message) {
+
+    private ApiResponse(Integer code, String message, T data, Boolean success) {
         this.code = code;
         this.message = message;
+        this.data = data;
+        this.success = success;
     }
 
-    public ApiResponse(Integer code, String message, T data) {
-        this(code, message);
-        this.data = data;
-    }
-
-    public ApiResponse(ResponseStatus status, T data) {
-        this(status);
-        this.data = data;
+    private ApiResponse(Integer code, String message, Boolean success) {
+        this.code = code;
+        this.message = message;
+        this.success = success;
     }
 
     public static <T> ApiResponse<T> success() {
-        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage());
+        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage(), true);
     }
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage(), data);
+        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage(), data, true);
     }
 
     public static <T> ApiResponse<T> success(ResponseStatus status, T data) {
-        return new ApiResponse<>(status, data);
+        return new ApiResponse<>(status, data, true);
     }
 
     // 添加新的成功响应方法，允许自定义消息
     public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), message, data);
+        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), message, data, true);
     }
 
     public static <T> ApiResponse<T> success(Integer code, String message, T data) {
-        return new ApiResponse<>(code, message, data);
+        return new ApiResponse<>(code, message, data, true);
     }
 
     public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message);
+        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message, false);
     }
 
     public static <T> ApiResponse<T> error(Integer code, String message) {
-        return new ApiResponse<>(code, message);
+        return new ApiResponse<>(code, message, false);
     }
 
     public static <T> ApiResponse<T> error() {
         return new ApiResponse<>(ResponseStatus.INTERNAL_SERVER_ERROR.getCode(),
-                ResponseStatus.INTERNAL_SERVER_ERROR.getMessage());
+                ResponseStatus.INTERNAL_SERVER_ERROR.getMessage(), false);
     }
 
     public static <T> ApiResponse<T> error(ResponseStatus responseStatus) {
-        return new ApiResponse<>(responseStatus.getCode(), responseStatus.getMessage());
+        return new ApiResponse<>(responseStatus.getCode(), responseStatus.getMessage(), false);
     }
 
     public static <T> ApiResponse<T> error(ResponseStatus responseStatus, T data) {
-        return new ApiResponse<>(responseStatus.getCode(), responseStatus.getMessage(), data);
+        return new ApiResponse<>(responseStatus.getCode(), responseStatus.getMessage(), data, false);
     }
 
     // 添加新的错误响应方法，允许自定义消息
     public static <T> ApiResponse<T> error(String message, T data) {
-        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message, data);
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
+        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message, data, false);
     }
 
     @Override
