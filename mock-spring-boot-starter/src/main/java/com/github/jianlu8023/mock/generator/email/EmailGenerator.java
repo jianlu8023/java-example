@@ -17,34 +17,28 @@ public class EmailGenerator extends AbstractGenerator<String> {
         return SingleHolder.INSTANCE;
     }
 
-    public static EmailGenerator newInstance(Integer lMin, Integer lMax) {
-        EmailGenerator.lMax = lMax;
-        EmailGenerator.lMin = lMin;
-        return SingleHolder.INSTANCE;
-    }
-
 
     private static final String[] email_suffix = "@gmail.com,@yahoo.com,@msn.com,@hotmail.com,@aol.com,@ask.com,@live.com,@qq.com,@0355.net,@163.com,@163.net,@263.net,@3721.net,@yeah.net,@googlemail.com,@126.com,@sina.com,@sohu.com,@yahoo.com.cn".split(",");
 
     public static String base = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-    private static Integer lMin = 10;
+    private Integer lMin = 10;
 
-    private static Integer lMax = 25;
+    private Integer lMax = 25;
 
-    public static void setlMin(Integer lMin) {
-        EmailGenerator.lMin = lMin;
+    public void setlMin(Integer lMin) {
+        this.lMin = lMin;
     }
 
-    public static void setlMax(Integer lMax) {
-        EmailGenerator.lMax = lMax;
+    public void setlMax(Integer lMax) {
+        this.lMax = lMax;
     }
 
-    public static Integer getlMax() {
+    public Integer getlMax() {
         return lMax;
     }
 
-    public static Integer getlMin() {
+    public Integer getlMin() {
         return lMin;
     }
 

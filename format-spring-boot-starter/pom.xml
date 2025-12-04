@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- <parent> -->
-    <!--     <artifactId>spring-boot-starter-parent</artifactId> -->
-    <!--     <groupId>org.springframework.boot</groupId> -->
-    <!--     <version>2.7.18</version> -->
-    <!--     <relativePath/> -->
-    <!-- </parent> -->
     <parent>
         <artifactId>java-example</artifactId>
         <groupId>com.github.jianlu8023</groupId>
@@ -21,9 +14,32 @@
     <groupId>com.github.jianlu8023</groupId>
     <artifactId>format-spring-boot-starter</artifactId>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
 
     <name>format-spring-boot-starter</name>
-    <description>myself format http response spring boot starter</description>
+    <description>Spring Boot Starter for unified response formatting, global exception handling, and request logging
+    </description>
+    <url>https://github.com/jianlu8023/java-example</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Jian Lu</name>
+            <email>jianlu8023@example.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/jianlu8023/java-example.git</connection>
+        <developerConnection>scm:git:ssh://github.com/jianlu8023/java-example.git</developerConnection>
+        <url>https://github.com/jianlu8023/java-example</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -60,51 +76,7 @@
     </dependencies>
 
     <build>
-        <!--<resources>-->
-        <!--    <resource>-->
-        <!--        <directory>src/main/resources</directory>-->
-        <!--        <filtering>true</filtering>-->
-        <!--    </resource>-->
-        <!--    <resource>-->
-        <!--        <directory>${project.basedir}/lib</directory>-->
-        <!--        <targetPath>BOOT-INF/lib/</targetPath>-->
-        <!--        <includes>-->
-        <!--            <include>**/*.jar</include>-->
-        <!--        </includes>-->
-        <!--    </resource>-->
-        <!--    <resource>-->
-        <!--        <directory>src/main/resources</directory>-->
-        <!--        <targetPath>BOOT-INF/classes/</targetPath>-->
-        <!--    </resource>-->
-        <!--</resources>-->
-
         <plugins>
-            <!-- <plugin> -->
-            <!--     <groupId>org.springframework.boot</groupId> -->
-            <!--     <artifactId>spring-boot-maven-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         &lt;!&ndash; 如果没有该项配置devtools不会起作用，即应用不会restart &ndash;&gt; -->
-            <!--         &lt;!&ndash;<fork>true</fork>&ndash;&gt; -->
-            <!--         &lt;!&ndash;支持静态文件热部署&ndash;&gt; -->
-            <!--         <addResources>true</addResources> -->
-            <!--         &lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt; -->
-            <!--         <mainClass>com.github.jianlu8023.format.FormatApplication</mainClass> -->
-
-            <!--         &lt;!&ndash; spring-boot-maven-plugin这个插件打包的Jar包可以直接运行，但是不可依赖, 添加如下配置使其可被依赖 &ndash;&gt; -->
-            <!--         <classifier>exec</classifier> -->
-
-            <!--     </configuration> -->
-            <!--     <executions> -->
-            <!--         <execution> -->
-            <!--             <id>repackage</id> -->
-            <!--             <goals> -->
-            <!--                 &lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt; -->
-            <!--                 <goal>repackage</goal> -->
-            <!--             </goals> -->
-            <!--         </execution> -->
-            <!--     </executions> -->
-            <!-- </plugin> -->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -118,39 +90,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <!-- <plugin> -->
-            <!--     <groupId>org.apache.maven.plugins</groupId> -->
-            <!--     <artifactId>maven-resources-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         &lt;!&ndash;将不需要转码的文件扩展名填入nonFilteredFileExtensions&ndash;&gt; -->
-            <!--         <nonFilteredFileExtensions> -->
-            <!--             &lt;!&ndash;<nonFilteredFileExtension>p12</nonFilteredFileExtension>&ndash;&gt; -->
-            <!--             <nonFilteredFileExtension>jks</nonFilteredFileExtension> -->
-            <!--             <nonFilteredFileExtension>xls</nonFilteredFileExtension> -->
-            <!--             <nonFilteredFileExtension>xlsx</nonFilteredFileExtension> -->
-            <!--         </nonFilteredFileExtensions> -->
-            <!--     </configuration> -->
-            <!--     <executions> -->
-            <!--         <execution> -->
-            <!--             <id>copy-static-files</id> -->
-            <!--             <phase>generate-resources</phase> -->
-            <!--             <goals> -->
-            <!--                 <goal>copy-resources</goal> -->
-            <!--             </goals> -->
-            <!--             <configuration> -->
-            <!--                 <outputDirectory>${project.build.outputDirectory}/static</outputDirectory> -->
-            <!--                 <resources> -->
-            <!--                     <resource> -->
-            <!--                         <directory>src/main/resources/static</directory> -->
-            <!--                         <includes> -->
-            <!--                             <include>**/*</include> -->
-            <!--                         </includes> -->
-            <!--                     </resource> -->
-            <!--                 </resources> -->
-            <!--             </configuration> -->
-            <!--         </execution> -->
-            <!--     </executions> -->
-            <!-- </plugin> -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

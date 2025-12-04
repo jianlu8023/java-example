@@ -1,32 +1,37 @@
 package com.github.jianlu8023.format.config;
 
 import com.github.jianlu8023.format.advice.exception.*;
-import com.github.jianlu8023.format.advice.request.log.*;
+import com.github.jianlu8023.format.advice.request.*;
 import com.github.jianlu8023.format.advice.response.*;
 import lombok.extern.slf4j.*;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.web.servlet.*;
 import org.springframework.context.annotation.*;
 
 @Configuration
+@ConditionalOnWebApplication
+@ConditionalOnClass({ExceptionAdvice.class, ResponseAdvice.class, RequestLogAdvice.class})
+@AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @Slf4j
 public class FormatAutoConfiguration {
 
     @Bean
-    @ConditionalOnClass(GlobalExceptionAdvice.class)
-    GlobalExceptionAdvice globalExceptionHandler() {
+    @ConditionalOnMissingBean
+    ExceptionAdvice globalExceptionHandler() {
         log.debug("inject globalExceptionHandler");
-        return new GlobalExceptionAdvice();
+        return new ExceptionAdvice();
     }
 
     @Bean
-    @ConditionalOnClass(ResponseBodyResultAdvice.class)
-    ResponseBodyResultAdvice responseBodyResultAdvice() {
+    @ConditionalOnMissingBean
+    ResponseAdvice responseBodyResultAdvice() {
         log.debug("inject responseBodyResultAdvice");
-        return new ResponseBodyResultAdvice();
+        return new ResponseAdvice();
     }
 
     @Bean
-    @ConditionalOnClass(RequestLogAdvice.class)
+    @ConditionalOnMissingBean
     RequestLogAdvice requestLogAdvice() {
         log.debug("inject requestLogAdvice");
         return new RequestLogAdvice();

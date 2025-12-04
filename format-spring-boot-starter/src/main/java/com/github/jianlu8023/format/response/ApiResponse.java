@@ -14,6 +14,9 @@ public class ApiResponse<T> implements Serializable {
 
     private T data;
 
+    public ApiResponse() {
+    }
+
     public ApiResponse(ResponseStatus responseStatus) {
         this.code = responseStatus.getCode();
         this.message = responseStatus.getMessage();
@@ -46,8 +49,17 @@ public class ApiResponse<T> implements Serializable {
         return new ApiResponse<>(status, data);
     }
 
+    // 添加新的成功响应方法，允许自定义消息
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(ResponseStatus.SUCCESS.getCode(), message, data);
+    }
+
+    public static <T> ApiResponse<T> success(Integer code, String message, T data) {
+        return new ApiResponse<>(code, message, data);
+    }
+
     public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<>(ResponseStatus.FAILURE.getCode(), message);
+        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message);
     }
 
     public static <T> ApiResponse<T> error(Integer code, String message) {
@@ -67,13 +79,29 @@ public class ApiResponse<T> implements Serializable {
         return new ApiResponse<>(responseStatus.getCode(), responseStatus.getMessage(), data);
     }
 
+    // 添加新的错误响应方法，允许自定义消息
+    public static <T> ApiResponse<T> error(String message, T data) {
+        return new ApiResponse<>(ResponseStatus.BUSINESS_ERROR.getCode(), message, data);
+    }
+
+    public Integer getCode() {
+        return code;
+    }
 
     public void setCode(Integer code) {
         this.code = code;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public T getData() {
+        return data;
     }
 
     public void setData(T data) {
@@ -96,9 +124,9 @@ public class ApiResponse<T> implements Serializable {
     @Override
     public String toString() {
         return "ApiResponse{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                '}';
+                       "code=" + code +
+                       ", message='" + message + '\'' +
+                       ", data=" + data +
+                       '}';
     }
 }
