@@ -32,7 +32,6 @@ public class ResponseBodyResultAdvice implements ResponseBodyAdvice<Object> {
         return AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ANNOTATION_TYPE) || returnType.hasMethodAnnotation(ANNOTATION_TYPE);
     }
 
-    @SneakyThrows
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 如果返回类型是string，那么springmvc是直接返回的，此时需要手动转化为json
@@ -40,9 +39,14 @@ public class ResponseBodyResultAdvice implements ResponseBodyAdvice<Object> {
         // 会报错cannot be cast to java.lang.String
         Class<?> returnClass = Objects.requireNonNull(returnType.getMethod()).getReturnType();
         if (body instanceof String || Objects.equals(returnClass, String.class)) {
-            String value = objectMapper.writeValueAsString(ApiResponse.success(body));
-            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-            return value;
+            try {
+                String value = objectMapper.writeValueAsString(ApiResponse.success(body));
+                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                return value;
+            } catch (JsonProcessingException e) {
+                // 处理JSON序列化异常
+                throw new RuntimeException("JSON序列化失败", e);
+            }
         }
         // 防止重复包裹的问题出现
         if (body instanceof ApiResponse) {
