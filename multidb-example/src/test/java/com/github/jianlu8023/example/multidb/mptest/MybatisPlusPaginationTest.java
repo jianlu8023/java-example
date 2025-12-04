@@ -1,10 +1,10 @@
 package com.github.jianlu8023.example.multidb.mptest;
 
 import com.baomidou.mybatisplus.core.conditions.query.*;
+import com.github.jianlu8023.mock.generator.pojo.*;
+import com.github.jianlu8023.mock.generator.utils.*;
 import com.github.jianlu8023.multidbexample.web.db1.entity.*;
 import com.github.jianlu8023.multidbexample.web.db1.service.*;
-import com.github.jianlu8023.utils.generator.pojo.*;
-import com.github.jianlu8023.utils.generator.utils.*;
 import com.github.pagehelper.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;

@@ -1,6 +1,5 @@
 package com.github.jianlu8023.example.integration;
 
-import com.github.jianlu8023.format.annotation.*;
 import org.slf4j.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.*;
 )
 @EnableScheduling
 @EnableTransactionManagement
-@EnableFormat
 @EnableCaching
 public class IntegrationApplication {
     private static final Logger L = LoggerFactory.getLogger(IntegrationApplication.class);

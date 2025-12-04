@@ -93,11 +93,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.jianlu8023.utils</groupId>
+            <groupId>com.github.jianlu8023.java-example</groupId>
             <artifactId>mock-spring-boot-starter</artifactId>
-            <version>${mock-spring-boot-starter.version}</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/lib/mock-spring-boot-starter-1.0.1.ALPHA.jar</systemPath>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

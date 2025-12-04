@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/https")
 public class HttpsController {
     private static final Logger L = LoggerFactory.getLogger(HttpsController.class);
 

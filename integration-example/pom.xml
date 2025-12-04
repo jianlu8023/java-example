@@ -72,18 +72,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--    format-spring-boot-starter    -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.github.jianlu8023.utils</groupId> -->
-        <!--     <artifactId>format-spring-boot-starter</artifactId> -->
-        <!--     <version>1.0.1.RELEASE</version> -->
-        <!--     <scope>system</scope> -->
-        <!--     <systemPath>${pom.basedir}/lib/format-spring-boot-starter-1.0.1.RELEASE.jar</systemPath> -->
-        <!-- </dependency> -->
         <dependency>
-            <groupId>com.gitee.jianlu8023</groupId>
+            <groupId>com.github.jianlu8023.java-example</groupId>
             <artifactId>format-spring-boot-starter</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!--   fastjson     -->
@@ -230,16 +222,8 @@
             <version>${p6spy.version}</version>
         </dependency>
 
-        <!--mock-spring-boot-starter-->
-        <!-- <dependency> -->
-        <!--     <groupId>com.github.jianlu8023.utils</groupId> -->
-        <!--     <artifactId>mock-spring-boot-starter</artifactId> -->
-        <!--     <version>1.0.1.ALPHA</version> -->
-        <!--     <scope>system</scope> -->
-        <!--     <systemPath>${pom.basedir}/lib/mock-spring-boot-starter-1.0.1.ALPHA.jar</systemPath> -->
-        <!-- </dependency> -->
         <dependency>
-            <groupId>com.gitee.jianlu8023</groupId>
+            <groupId>com.github.jianlu8023.java-example</groupId>
             <artifactId>mock-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>

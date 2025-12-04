@@ -37,11 +37,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.jianlu8023</groupId>
+            <groupId>com.github.jianlu8023.java-example</groupId>
             <artifactId>format-spring-boot-starter</artifactId>
-            <version>1.0.0.RELEASE</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/lib/format-spring-boot-starter-1.0.0.RELEASE.jar</systemPath>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
