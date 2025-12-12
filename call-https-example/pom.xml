@@ -37,7 +37,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.jianlu8023.java-example</groupId>
+            <groupId>com.github.jianlu8023</groupId>
             <artifactId>format-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
