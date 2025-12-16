@@ -6,6 +6,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.github.jianlu8023</groupId>
+        <artifactId>java-example</artifactId>
+        <version>1.0.0-alpha</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+
     <groupId>com.github.jianlu8023</groupId>
     <artifactId>basemaven-example</artifactId>
     <version>1.0.0.ALPHA</version>

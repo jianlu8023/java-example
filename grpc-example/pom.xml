@@ -116,4 +116,136 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <!--依赖加速-->
+    <repositories>
+        <!-- aliyun public 包含 central jcenter -->
+        <repository>
+            <id>aLiYun-public</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- huawei repo -->
+        <repository>
+            <id>huawei-repo</id>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- tsinghua repo -->
+        <repository>
+            <id>tsinghua-repo</id>
+            <url>https://mirrors.tuna.tsinghua.edu.cn/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- tencent repo -->
+        <repository>
+            <id>tencent-repo</id>
+            <url>https://mirrors.tencent.com/nexus/repository/maven-central/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- netEase repo -->
+        <repository>
+            <id>netEase-repo</id>
+            <url>https://mirrors.163.com/maven/repository/maven-central/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- jeecg  repo-->
+        <repository>
+            <id>jeecg-repo</id>
+            <url>https://maven.jeecg.org/nexus/content/repositories/jeecg</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+        <!-- central repo -->
+        <repository>
+            <id>central-repo</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- jitpack-repo -->
+        <repository>
+            <id>jitpack</id>
+            <url>https://gitpack.io</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
+
+    <pluginRepositories>
+        <!-- aliyun plugin -->
+        <pluginRepository>
+            <id>aLiYun-public</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+
+        <!-- jitpack plugin -->
+        <pluginRepository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </pluginRepository>
+
+    </pluginRepositories>
+
 </project>

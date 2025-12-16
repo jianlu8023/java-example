@@ -5,6 +5,12 @@
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.jianlu8023</groupId>
+        <artifactId>java-example</artifactId>
+        <version>1.0.0-alpha</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <groupId>com.github.jianlu8023</groupId>
     <artifactId>jsp-example</artifactId>
