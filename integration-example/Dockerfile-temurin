@@ -1,0 +1,55 @@
+FROM alpine:3.23 AS date-builder
+
+RUN sed -i 's#dl-cdn.alpinelinux.org#mirrors.ustc.edu.cn#g' /etc/apk/repositories \
+    && apk update \
+    && apk add tzdata
+
+RUN echo 'Asia/Shanghai' > /etc/timezone \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+FROM maven:3.6.3 AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN mvn -Dmaven.test.skip=true -DarchetypeCatalog=internal -Dfile.encoding=UTF-8 clean compile package
+
+FROM eclipse-temurin:8-jre-alpine-3.23 AS runner
+
+# docker run -v $(pwd)/certs:/certificates/ -e USE_SYSTEM_CA_CERTS=1 eclipse-temurin:25
+
+# 默认开启使用自定义中间CA
+ENV TZ=Asia/Shanghai \
+    LANG='en_US.UTF-8' \
+    LANGUAGE='en_US:en' \
+    LC_ALL='en_US.UTF-8' \
+    USE_SYSTEM_CA_CERTS=1
+
+LABEL com.github.jianlu8023.java-example.version=1.0.0 \
+      com.github.jianlu8023.java-example.runtime=eclipse-temurin
+
+WORKDIR /home/appuser/app
+
+COPY --from=date-builder /etc/localtime /etc/localtime
+COPY --from=date-builder /etc/timezone /etc/timezone
+COPY --from=builder /app/target/lib /home/appuser/app/lib
+COPY --from=builder /app/target/config /home/appuser/app/config
+COPY --from=builder /app/target/*.jar /home/appuser/app/application.jar
+
+RUN addgroup -g 100 -S users && \
+    adduser -m -r -u 1000 -g users appuser && \
+    mkdir -p /home/appuser/app/logs && \
+    chown -R appuser:users /home/appuser
+
+EXPOSE 8080
+
+VOLUME /home/appuser/app/config \
+       /home/appuser/app/logs \
+       /home/appuser/app/db \
+       /certificates
+
+ENTRYPOINT ["java","-jar","application.jar"]
+HEALTHCHECK --interval=60s --timeout=5s --retries=3 \
+	CMD echo $(wget --no-check-certificate --post-data '' -O - -q https://localhost:8090/integration/status/ping) |  sed -n 's/.*"code":[[:space:]]*\([0-9][0-9]*\).*/\1/p' | grep -q "200" || exit 1
+CMD ["",""]

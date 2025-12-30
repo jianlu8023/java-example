@@ -3,6 +3,9 @@ logs/
 env/
 
 docker-compose.yaml
-
+Dockerfile*
 HELP.md
 
+Makefile
+
+readme.txt
