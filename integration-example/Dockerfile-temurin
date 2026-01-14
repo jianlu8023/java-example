@@ -1,19 +1,93 @@
-FROM alpine:3.23 AS date-builder
+FROM maven:3.9.11 AS dependencies
 
-RUN sed -i 's#dl-cdn.alpinelinux.org#mirrors.ustc.edu.cn#g' /etc/apk/repositories \
-    && apk update \
-    && apk add tzdata
+WORKDIR /build
 
-RUN echo 'Asia/Shanghai' > /etc/timezone \
-    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+COPY pom.xml pom.xml
 
-FROM maven:3.6.3 AS builder
+RUN mkdir -p /root/.m2 && \
+ tee /root/.m2/settings.xml <<'EOF' && \
+ mvn dependency:resolve dependency:resolve-plugins
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<mirrors>
+ <mirror>
+   <id>aliyun-mirror</id>
+   <url>https://maven.aliyun.com/repository/public</url>
+   <name>aliyun-cloud-maven-mirror</name>
+   <mirrorOf>central,!jitpack-repo</mirrorOf>
+ </mirror>
+ <mirror>
+   <id>jitpack.io</id>
+   <mirrorOf>jitpack-repo</mirrorOf>
+   <name>jitpack</name>
+   <url>https://www.jitpack.io</url>
+ </mirror>
+</mirrors>
+<profiles>
+ <profile>
+   <id>mirror</id>
+   <repositories>
+     <repository>
+       <id>central</id>
+       <name>Aliyun Maven Repository</name>
+       <url>https://maven.aliyun.com/repository/public</url>
+       <snapshots>
+         <enabled>false</enabled>
+       </snapshots>
+       <releases>
+         <enabled>true</enabled>
+       </releases>
+     </repository>
+     <repository>
+       <id>jitpack-repo</id>
+       <name>jitpack Maven Repository</name>
+       <url>https://www.jitpack.io</url>
+       <snapshots>
+         <enabled>false</enabled>
+       </snapshots>
+       <releases>
+         <enabled>true</enabled>
+       </releases>
+     </repository>
+   </repositories>
+   <pluginRepositories>
+     <pluginRepository>
+       <id>aliyun-plugin</id>
+       <name>aliyun-plugin</name>
+       <url>https://maven.aliyun.com/repository/public</url>
+     </pluginRepository>
+     <pluginRepository>
+       <id>jitpack-plugin</id>
+       <name>jitpack-plugin</name>
+       <url>https://www.jitpack.io</url>
+     </pluginRepository>
+   </pluginRepositories>
+ </profile>
+</profiles>
+<activeProfiles>
+ <activeProfile>mirror</activeProfile>
+</activeProfiles>
+</settings>
+EOF
+
+
+FROM maven:3.9.11 AS builder
+
+COPY --from=dependencies /root/.m2 /root/.m2
 
 WORKDIR /app
 
 COPY . .
 
-RUN mvn -Dmaven.test.skip=true -DarchetypeCatalog=internal -Dfile.encoding=UTF-8 clean compile package
+RUN mvn -Dmaven.test.skip=true -DarchetypeCatalog=internal -Dfile.encoding=UTF-8 clean compile package -X
+
+FROM alpine:3.23 AS date-builder
+
+RUN sed -i 's#dl-cdn.alpinelinux.org#mirrors.ustc.edu.cn#g' /etc/apk/repositories && \
+    apk update && \
+    apk add tzdata --no-cache && \
+    echo 'Asia/Shanghai' > /etc/timezone && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 FROM eclipse-temurin:8-jre-alpine-3.23 AS runner
 
@@ -29,18 +103,20 @@ ENV TZ=Asia/Shanghai \
 LABEL com.github.jianlu8023.java-example.version=1.0.0 \
       com.github.jianlu8023.java-example.runtime=eclipse-temurin
 
+RUN addgroup -g 100 -S users && \
+    adduser -h /home/appuser -m -r -u 1000 -g users appuser && \
+    mkdir -p /home/appuser/app/logs && \
+    chown -R appuser:users /home/appuser && \
+    printf '%s\n' '#!/bin/sh' 'ls -lah --color=auto "$@"' > /usr/bin/ll && \
+    chmod +x /usr/bin/ll
+
 WORKDIR /home/appuser/app
 
 COPY --from=date-builder /etc/localtime /etc/localtime
 COPY --from=date-builder /etc/timezone /etc/timezone
-COPY --from=builder /app/target/lib /home/appuser/app/lib
-COPY --from=builder /app/target/config /home/appuser/app/config
-COPY --from=builder /app/target/*.jar /home/appuser/app/application.jar
-
-RUN addgroup -g 100 -S users && \
-    adduser -m -r -u 1000 -g users appuser && \
-    mkdir -p /home/appuser/app/logs && \
-    chown -R appuser:users /home/appuser
+COPY --from=builder --chwon=appuser:users /app/target/lib /home/appuser/app/lib
+COPY --from=builder --chwon=appuser:users /app/target/config /home/appuser/app/config
+COPY --from=builder --chwon=appuser:users /app/target/*.jar /home/appuser/app/application.jar
 
 EXPOSE 8080
 
@@ -48,6 +124,8 @@ VOLUME /home/appuser/app/config \
        /home/appuser/app/logs \
        /home/appuser/app/db \
        /certificates
+
+USER appuser:users
 
 ENTRYPOINT ["java","-jar","application.jar"]
 HEALTHCHECK --interval=60s --timeout=5s --retries=3 \
