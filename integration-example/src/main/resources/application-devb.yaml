@@ -52,6 +52,11 @@ spring:
           driver-class-name: com.p6spy.engine.spy.P6SpyDriver
           username: SYSDBA
           password: SYSDBA001
+        sqlite:
+          url: jdbc:p6spy:sqlite:db/db.sqlite
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          username: ""
+          password: ""
       druid:
         # 配置初始化线程数
         initialSize: 5
@@ -156,7 +161,7 @@ spring:
       enabled: false
   web:
     resources:
-      static-locations: classpath:/static/
+      static-locations: classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/, file:/static/
       #不要为工程中的资源文件建立映射,禁止静态资源的访问
       add-mappings: false
   mvc:

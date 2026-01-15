@@ -14,18 +14,45 @@
 
     <!--定义日志文件的存储地址，使用Spring的属性文件配置方式-->
     <!--读取spring配置文件上的属性-->
-    <springProperty scope="context" name="log.home" source="logging.file.path" defaultValue="logs"/>
-    <springProperty scope="context" name="app.name" source="spring.application.name" defaultValue="app"/>
+    <springProperty scope="context" name="spring.log.path" source="logging.file.path" defaultValue="logs"/>
+    <springProperty scope="context" name="spring.app.name" source="spring.application.name" defaultValue="app"/>
 
     <!-- date 格式定义 -->
-    <property name="LOG_DATEFORMAT" value="yyyy-MM-dd"/>
+    <property name="base.date.pattern" value="yyyy-MM-dd"/>
+
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="base.log.path" value="${spring.log.path:-}/${spring.app.name:-}/"/>
 
     <!-- 定义日志归档文件名称格式，每天生成一个日志文件 -->
     <property name="ARCHIVE_PATTERN"
               value="${LogPath}/%d{${LOG_DATEFORMAT}}/info-%d{${LOG_DATEFORMAT}}-%i.log.gz"/>
 
-    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LogPath" value="${log.home:- }/${app.name:-log}/"/>
+    <property name="base.info.archive.pattern"
+              value="${base.log.path}%d{yyyy-MM-dd}/info-%d{yyyy-MM-dd}-%i.log.gz"/>
+    <property name="base.info.pattern"
+              value="${base.log.path}info.log"/>
+
+    <property name="base.all.archive.pattern"
+              value="${base.log.path}%d{yyyy-MM-dd}/all-%d{yyyy-MM-dd}-%i.log.gz"/>
+    <property name="base.all.pattern"
+              value="${base.log.path}all.log"/>
+
+    <property name="base.error.archive.pattern"
+              value="${base.log.path}%d{yyyy-MM-dd}/error-%d{yyyy-MM-dd}-%i.log.gz"/>
+    <property name="base.error.pattern"
+              value="${base.log.path}error.log"/>
+
+    <!--
+        springboot2 converterClass
+        springboot3 class
+     -->
+    <conversionRule conversionWord="clr"
+                    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
     <!--
         格式化输出：
             %d表示日期，
@@ -34,44 +61,49 @@
             %msg：日志消息，
             %n是换行符
     -->
-    <property name="CONSOLE_LOG_PATTERN"
-              value="[%d{YYYY-MM-dd HH:mm:ss.SSS}] [%highlight(%-5level)] [%highlight(%thread)] [%cyan(%logger{60})] [%blue(%method):%cyan(%line)] : %msg%n"/>
+    <!--
+        %gray(%X{traceId:-})
+        [%blue(%method):%cyan(%-4.4line)]
+    -->
+    <property name="base.console"
+              value="[%d{YY/MM/dd HH:mm:ss.SSS}] [${PID:-%processId}] [%highlight(%-5level)] %highlight(%thread) [%cyan(%-36.36logger{36})] [%blue(%method):%cyan(%-4.4line)] : %msg%n%wEx"/>
 
-    <property name="FILE_LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{60}] [%method:%line] : %msg%n"/>
+    <!--
+        %-16.16X{traceId:-}
+        [%method:%-4.4line]
+    -->
+    <property name="base.file"
+              value="[%d{yy/MM/dd HH:mm:ss.SSS}] [${PID:-%processId}] [%-5level] %thread [%-36.36logger{36}] [%method:%-4.4line] : %msg%n%wEx"/>
 
 
     <!--控制台日志， 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>utf8</charset>
+            <pattern>${base.console}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
 
     <!--
         文件日志， 按照每天生成日志文件
         输出全部日志
-        -->
+    -->
     <appender name="all" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
-        <file>${LogPath}/all.log</file>
+        <file>${base.all.pattern}</file>
         <!--日志文件输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <pattern>${base.file}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 文件滚动策略根据%d{patter}中的“patter”而定，此处为每天产生一个文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${LogPath}/all-%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+            <FileNamePattern>${base.all.archive.pattern}</FileNamePattern>
             <!--日志文件保留天数-->
             <maxHistory>30</maxHistory>
-            <!--<maxFileSize>100MB</maxFileSize>-->
-            <!--<totalSizeCap>3GB</totalSizeCap>-->
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>3GB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
         <!-- 追加方式记录日志 -->
         <append>true</append>
@@ -81,53 +113,44 @@
             <!--<onMatch>ACCEPT</onMatch>-->
             <!--<onMismatch>DENY</onMismatch>-->
         </filter>
-        <!--日志文件最大的大小-->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>10MB</maxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LogPath}/info.log</file>
+        <file>${base.info.pattern}</file>
         <!--级别过滤-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <!-- 文件滚动策略根据%d{patter}中的“patter”而定，此处为根据大小 -->
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
             <!--<fileNamePattern>${log.home}/sys-info.log.%d{yyyy-MM-dd}.zip</fileNamePattern>-->
-            <fileNamePattern>${ARCHIVE_PATTERN}</fileNamePattern>
+            <fileNamePattern>${base.info.archive.pattern}</fileNamePattern>
             <!--日志文件保留天数-->
             <maxHistory>30</maxHistory>
             <!--定义日志文件切割的阈值，本例是 100MB-->
             <maxFileSize>100MB</maxFileSize>
-            <!--<totalSizeCap>3GB</totalSizeCap>-->
+            <totalSizeCap>3GB</totalSizeCap>
             <!-- 删除过期文件 -->
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
             <!-- zip 压缩生成的归档文件 -->
-            <timeBasedFileNamingAndTriggeringPolicy
+            <!-- <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+            </timeBasedFileNamingAndTriggeringPolicy> -->
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>utf8</charset>
+            <pattern>${base.file}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
         <!-- 追加方式记录日志 -->
         <append>true</append>
-        <!--日志文件最大的大小-->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LogPath}/error.log</file>
+        <file>${base.error.pattern}</file>
         <!--级别过滤-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -137,29 +160,36 @@
         <!-- 追加方式记录日志 -->
         <append>true</append>
         <!-- 文件滚动策略根据%d{patter}中的“patter”而定，此处为每天产生一个文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${log.home}/error.log.%d{yyyy-MM-dd}.zip</FileNamePattern>
+            <FileNamePattern>${base.error.archive.pattern}</FileNamePattern>
             <!--日志文件保留天数-->
             <maxHistory>30</maxHistory>
-            <!--<maxFileSize>100MB</maxFileSize>-->
-            <!--<totalSizeCap>3GB</totalSizeCap>-->
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>3GB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>utf8</charset>
+            <pattern>${base.file}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
-        <!--日志文件最大的大小-->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>10MB</maxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <!--异步输出日志信息-->
-    <appender name="asyncFile" class="ch.qos.logback.classic.AsyncAppender">
+    <appender name="asyncInfo" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
         <queueSize>256</queueSize>
         <appender-ref ref="info"/>
+    </appender>
+    <appender name="asyncError" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="error"/>
+    </appender>
+    <appender name="asyncAll" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="all"/>
     </appender>
 
     <!--定义所有组件的日志级别，如所有 DEBUG-->
@@ -168,7 +198,7 @@
     -->
     <logger name="com.fasterxml" level="TRACE" additivity="false">
         <appender-ref ref="console"/>
-        <appender-ref ref="all"/>
+        <appender-ref ref="asyncAll"/>
     </logger>
 
     <logger name="org.springframework" level="warn"/>
@@ -176,8 +206,8 @@
     <!-- 日志输出级别 -->
     <root level="info">
         <appender-ref ref="console"/>
-        <appender-ref ref="all"/>
-        <appender-ref ref="error"/>
-        <appender-ref ref="info"/>
+        <appender-ref ref="asyncInfo"/>
+        <appender-ref ref="asyncError"/>
+        <appender-ref ref="asyncAll"/>
     </root>
 </configuration>

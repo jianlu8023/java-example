@@ -70,7 +70,6 @@ RUN mkdir -p /root/.m2 && \
 </settings>
 EOF
 
-
 FROM maven:3.9.11 AS builder
 
 COPY --from=dependencies /root/.m2 /root/.m2
@@ -81,13 +80,21 @@ COPY . .
 
 RUN mvn -Dmaven.test.skip=true -DarchetypeCatalog=internal -Dfile.encoding=UTF-8 clean compile package -X
 
-FROM alpine:3.23 AS date-builder
+FROM alpine:3.23 AS tools-builder
 
 RUN sed -i 's#dl-cdn.alpinelinux.org#mirrors.ustc.edu.cn#g' /etc/apk/repositories && \
     apk update && \
-    apk add tzdata --no-cache && \
+    apk add --no-cache tzdata gosu tini && \
     echo 'Asia/Shanghai' > /etc/timezone && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+FROM alpine:3.23 AS code-cache
+
+WORKDIR /code
+
+COPY . .
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 FROM eclipse-temurin:8-jre-alpine-3.23 AS runner
 
@@ -106,16 +113,22 @@ LABEL com.github.jianlu8023.java-example.version=1.0.0 \
 RUN addgroup -g 100 -S users && \
     adduser -h /home/appuser -m -r -u 1000 -g users appuser && \
     mkdir -p /home/appuser/app/logs && \
+    mkdir -p /home/appiser/app/db && \
     chown -R appuser:users /home/appuser && \
     printf '%s\n' '#!/bin/sh' 'ls -lah --color=auto "$@"' > /usr/bin/ll && \
     chmod +x /usr/bin/ll
 
 WORKDIR /home/appuser/app
 
-COPY --from=date-builder /etc/localtime /etc/localtime
-COPY --from=date-builder /etc/timezone /etc/timezone
+COPY --from=tools-builder /etc/localtime /etc/localtime
+COPY --from=tools-builder /etc/timezone /etc/timezone
+COPY --from=tools-builder /usr/bin/gosu /usr/bin/guso
+COPY --from=tools-builder /sbin/tini /usr/bin/tini
+COPY --from=code-cache /docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder --chwon=appuser:users /app/target/lib /home/appuser/app/lib
 COPY --from=builder --chwon=appuser:users /app/target/config /home/appuser/app/config
+COPY --from=builder --chwon=appuser:users /app/target/static /home/appuser/app/static
+COPY --from=builder --chwon=appuser:users /app/target/db /home/appuser/app/db
 COPY --from=builder --chwon=appuser:users /app/target/*.jar /home/appuser/app/application.jar
 
 EXPOSE 8080
@@ -127,7 +140,7 @@ VOLUME /home/appuser/app/config \
 
 USER appuser:users
 
-ENTRYPOINT ["java","-jar","application.jar"]
+ENTRYPOINT ["/usr/bin/tini","--","/docker-entrypoint.sh"]
 HEALTHCHECK --interval=60s --timeout=5s --retries=3 \
 	CMD echo $(wget --no-check-certificate --post-data '' -O - -q https://localhost:8090/integration/status/ping) |  sed -n 's/.*"code":[[:space:]]*\([0-9][0-9]*\).*/\1/p' | grep -q "200" || exit 1
-CMD ["",""]
+CMD ["application.jar",""]
